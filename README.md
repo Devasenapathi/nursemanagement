@@ -1,59 +1,86 @@
 # Nurse Management System
 
-A full-stack web application for managing nurse records with CRUD operations, built with Node.js, Express, and SQLite.
-
-![Nurse Management System](https://img.shields.io/badge/Node.js-v18+-green.svg)
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
+A full-stack web application for managing nurse records built with Node.js and React.js.
 
 ## Features
 
-- ✅ **View All Nurses** - Display nurses in a responsive table
-- ✅ **Add Nurse** - Create new nurse records via a pop-up modal
-- ✅ **Edit Nurse** - Update existing nurse information
-- ✅ **Delete Nurse** - Remove nurse records with confirmation
-- ✅ **Sorting** - Click on table headers to sort by any column (Name, License Number, DOB, Age)
-- ✅ **CSV Download** - Export all nurse data to CSV format
-- ✅ **Async/Await & Promises** - Modern JavaScript patterns for API calls
-- ✅ **Auto Age Calculation** - Automatically calculates age from Date of Birth
+- ✅ **View All Nurses** - Display all nurses in a beautiful, responsive table
+- ✅ **Add Nurse** - Add new nurse records via a modal popup
+- ✅ **Edit Nurse** - Edit existing nurse records
+- ✅ **Delete Nurse** - Remove nurse records
+- ✅ **Sorting** - Click on table headers to sort by any column (Name, License, DOB, Age)
+- ✅ **Download Data** - Export data as CSV or XLSX format
+- ✅ **Auto Age Calculation** - Age is auto-calculated when DOB is entered
 
 ## Tech Stack
 
-- **Backend**: Node.js, Express.js
-- **Database**: SQLite (using better-sqlite3)
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Features**: RESTful API, CORS enabled
+### Backend
+- **Node.js** with Express.js
+- **SQLite** database (using better-sqlite3)
+- RESTful API with CRUD operations
+- Uses **async/await** and **Promises** for asynchronous operations
 
-## Nurse Entity Fields
+### Frontend
+- **React.js 18** with Vite
+- Modern CSS with CSS variables
+- **xlsx** library for Excel export
+- Responsive design
 
-| Field | Type | Description |
-|-------|------|-------------|
-| Name | String | Full name of the nurse |
-| License Number | String | Unique nursing license number |
-| DOB | Date | Date of birth |
-| Age | Integer | Age in years |
+## Project Structure
 
-## Installation
+```
+nursemanagement/
+├── backend/
+│   ├── package.json
+│   └── server.js          # Express server with SQLite
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx        # Main React component
+│   │   ├── main.jsx       # React entry point
+│   │   └── index.css      # Styles
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+└── README.md
+```
 
-1. **Clone the repository**
+## Getting Started
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm
+
+### Installation
+
+1. **Install Backend Dependencies**
    ```bash
-   git clone <your-repo-url>
-   cd nursemanagement
-   ```
-
-2. **Install dependencies**
-   ```bash
+   cd backend
    npm install
    ```
 
-3. **Start the server**
+2. **Install Frontend Dependencies**
    ```bash
-   npm start
+   cd frontend
+   npm install
    ```
 
-4. **Open in browser**
+### Running the Application
+
+1. **Start the Backend Server** (Terminal 1)
+   ```bash
+   cd backend
+   npm start
    ```
-   http://localhost:3000
+   The API server will run on `http://localhost:5000`
+
+2. **Start the Frontend** (Terminal 2)
+   ```bash
+   cd frontend
+   npm run dev
    ```
+   The React app will run on `http://localhost:3000`
+
+3. **Open your browser** and navigate to `http://localhost:3000`
 
 ## API Endpoints
 
@@ -65,85 +92,35 @@ A full-stack web application for managing nurse records with CRUD operations, bu
 | PUT | `/api/nurses/:id` | Update a nurse |
 | DELETE | `/api/nurses/:id` | Delete a nurse |
 
-## Project Structure
+## Nurse Entity Fields
 
-```
-nursemanagement/
-├── server.js           # Express server and API routes
-├── package.json        # Dependencies and scripts
-├── nurses.db           # SQLite database (created on first run)
-├── public/
-│   ├── index.html      # Main HTML page
-│   ├── styles.css      # Styling
-│   └── app.js          # Frontend JavaScript
-└── README.md           # This file
-```
+| Field | Type | Description |
+|-------|------|-------------|
+| id | INTEGER | Auto-generated primary key |
+| name | TEXT | Nurse's full name |
+| license_number | TEXT | Unique license number |
+| dob | TEXT | Date of birth (YYYY-MM-DD) |
+| age | INTEGER | Age in years |
 
-## Code Highlights
+## Async/Await & Promises Usage
 
-### Async/Await Usage
-```javascript
-// Fetching nurses using async/await
-async function fetchNurses() {
-  try {
-    const response = await fetch('/api/nurses');
-    const result = await response.json();
-    // Process data...
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-```
+The application demonstrates both async/await and Promises:
 
-### Promise Usage
-```javascript
-// Delete operation using Promise
-function deleteNurse(id) {
-  const deletePromise = new Promise(async (resolve, reject) => {
-    try {
-      const response = await fetch(`/api/nurses/${id}`, { method: 'DELETE' });
-      const result = await response.json();
-      result.success ? resolve(result) : reject(new Error(result.error));
-    } catch (error) {
-      reject(error);
-    }
-  });
-  
-  deletePromise
-    .then(() => { /* success handling */ })
-    .catch(error => { /* error handling */ });
-}
-```
+### Backend (`server.js`)
+- Uses `asyncQuery` helper function that wraps database operations in Promises
+- All API endpoints use `async/await` for handling requests
 
-### Sorting Implementation
-```javascript
-// Click on table headers to sort
-function sortNurses(column, direction) {
-  nurses.sort((a, b) => {
-    let valueA = a[column];
-    let valueB = b[column];
-    // Compare and return sort order...
-  });
-}
-```
+### Frontend (`App.jsx`)
+- `createNurse` uses traditional Promise `.then()/.catch()` syntax
+- `fetchNurses`, `updateNurse`, `deleteNurse` use async/await
+- Custom hook `useNursesApi` demonstrates both patterns
 
 ## Screenshots
 
 The application features:
-- Modern dark theme UI with gradient accents
-- Responsive design for mobile and desktop
-- Animated table rows and smooth transitions
-- Modal pop-ups for add/edit operations
-- Toast notifications for user feedback
+- Dark theme with teal accents
+- Responsive table with sortable columns
+- Modal popup for adding/editing nurses
+- Toast notifications for feedback
+- Empty state when no data exists
 
-## License
-
-MIT License - feel free to use this project for learning or commercial purposes.
-
-## Author
-
-Created as a Nurse Management assignment demonstrating:
-- SQL database operations
-- CRUD functionality
-- Modern JavaScript (async/await, Promises)
-- Responsive web design
